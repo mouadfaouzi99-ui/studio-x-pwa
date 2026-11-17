@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="ar-MA" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>STUDIO X — Mixage, Mastering & IA Créative</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0A0910">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+:root{
+  --bg:#0A0910;
+  --bg-soft:#100E1A;
+  --bg-card:#161320;
+  --line:#2A2438;
+  --cyan:#4DE8D4;
+  --magenta:#E84DC4;
+  --amber:#F0B94D;
+  --text:#EDEAF5;
+  --text-dim:#8C87A3;
+  --danger:#E8574D;
+  --radius:14px;
+  --font-display:'Space Grotesk', 'Tajawal', sans-serif;
+  --font-mono:'JetBrains Mono', 'Space Grotesk', monospace;
+  --font-body:'Tajawal', 'Segoe UI', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+input,select{font-family:inherit;color:inherit;}
+a{color:inherit;text-decoration:none;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;}
+
+.bg-glow{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(circle at 15% 0%, rgba(77,232,212,0.06), transparent 45%),
+             radial-gradient(circle at 85% 100%, rgba(232,77,196,0.06), transparent 45%);
+}
+#app{position:relative;z-index:1;}
+.hidden{display:none !important;}
+
+/* NAV */
+.topnav{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:18px 24px;border-bottom:1px solid var(--line);
+  position:sticky;top:0;background:rgba(10,9,16,0.92);backdrop-filter:blur(10px);z-index:50;
+}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:19px;}
+.brand-mark{
+  width:32px;height:32px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(135deg, var(--cyan), var(--magenta));
+  display:flex;align-items:center;justify-content:center;
+}
+.brand-mark svg{width:18px;height:18px;}
+.nav-links{display:flex;gap:26px;}
+.nav-links a{font-size:13.5px;color:var(--text-dim);}
+.nav-links a:hover{color:var(--cyan);}
+
+.btn{padding:11px 22px;border-radius:10px;font-size:14px;font-weight:700;transition:transform 0.15s,opacity 0.15s;}
+.btn-primary{background:linear-gradient(135deg,var(--cyan),#2FB8A6);color:#06231F;}
+.btn-primary:hover{transform:translateY(-1px);}
+.btn-ghost{border:1px solid var(--line);}
+.btn-ghost:hover{border-color:var(--cyan);}
+.btn-sm{padding:8px 16px;font-size:13px;}
+.btn-block{width:100%;text-align:center;display:block;}
+.btn:disabled{opacity:0.4;cursor:default;transform:none;}
+
+/* HERO */
+.hero{padding:90px 24px 50px;max-width:920px;margin:0 auto;text-align:center;}
+.eyebrow{
+  display:inline-flex;gap:8px;align-items:center;font-size:11.5px;letter-spacing:2px;
+  color:var(--cyan);border:1px solid rgba(77,232,212,0.3);padding:7px 16px;border-radius:99px;
+  margin-bottom:26px;background:rgba(77,232,212,0.05);
+}
+.hero h1{font-family:var(--font-display);font-size:clamp(32px,5.5vw,58px);line-height:1.1;font-weight:700;margin-bottom:18px;}
+.hero h1 .grad{background:linear-gradient(120deg,var(--cyan),var(--magenta));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero p.lead{font-size:16.5px;color:var(--text-dim);max-width:540px;margin:0 auto 32px;line-height:1.7;}
+.hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+.section{padding:70px 24px;max-width:1080px;margin:0 auto;}
+.section-head{text-align:center;margin-bottom:44px;}
+.section-head .tag{font-size:11.5px;letter-spacing:2px;color:var(--magenta);font-weight:700;}
+.section-head h2{font-family:var(--font-display);font-size:clamp(24px,3.6vw,34px);margin-top:10px;}
+.section-head p{color:var(--text-dim);margin-top:10px;font-size:14.5px;}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+@media(max-width:880px){.grid-3{grid-template-columns:1fr;}.nav-links{display:none;}}
+.feat-card{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius);padding:26px 22px;}
+.feat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(77,232,212,0.08);border:1px solid rgba(77,232,212,0.2);margin-bottom:14px;font-size:18px;}
+.feat-card h3{font-size:15.5px;margin-bottom:8px;}
+.feat-card p{font-size:13px;color:var(--text-dim);line-height:1.6;}
+
+.footer{border-top:1px solid var(--line);padding:36px 24px;text-align:center;color:var(--text-dim);font-size:12.5px;}
+
+/* GATE */
+.gate{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px;}
+.gate-card{width:100%;max-width:380px;background:var(--bg-card);border:1px solid var(--line);border-radius:18px;padding:34px 28px;position:relative;}
+.gate-card h2{font-family:var(--font-display);font-size:21px;margin-bottom:6px;}
+.gate-card p{color:var(--text-dim);font-size:13px;margin-bottom:22px;}
+.gate-card input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:13px 14px;font-size:14px;outline:none;margin-bottom:14px;}
+.gate-card input:focus{border-color:var(--cyan);}
+
+/* APP SHELL */
+#appView{display:none;height:100vh;flex-direction:column;}
+#appView.active{display:flex;}
+.app-shell{display:flex;flex:1;overflow:hidden;}
+.sidebar{width:240px;flex-shrink:0;background:var(--bg-soft);border-right:1px solid var(--line);padding:18px 14px;display:flex;flex-direction:column;}
+.sidebar-top{display:flex;align-items:center;gap:10px;padding:6px 8px 16px;border-bottom:1px solid var(--line);margin-bottom:14px;}
+.tool-tab{display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:10px;font-size:13.5px;color:var(--text-dim);margin-bottom:4px;width:100%;text-align:left;}
+.tool-tab:hover{background:var(--bg-card);color:var(--text);}
+.tool-tab.active{background:rgba(77,232,212,0.1);color:var(--cyan);}
+.sidebar-footer{margin-top:auto;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--text-dim);}
+
+.main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.main-head{padding:16px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
+.main-head h2{font-size:15.5px;font-weight:700;}
+.main-head .sub{font-size:12px;color:var(--text-dim);margin-top:2px;}
+.menu-btn{display:none;width:34px;height:34px;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:8px;}
+
+/* DASHBOARD */
+.dashboard-tool{flex:1;overflow-y:auto;padding:clamp(20px,4vw,44px)}
+.dashboard-wrap{max-width:1050px;margin:0 auto}
+.dashboard-welcome{padding:12px 4px 28px}
+.dashboard-welcome .eyebrow{margin-bottom:12px}
+.dashboard-welcome h1{font-size:clamp(28px,5vw,42px);margin-bottom:8px}
+.dashboard-welcome p{color:var(--text-dim);font-size:14px}
+.dashboard-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.dashboard-card{min-height:230px;text-align:right;display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:22px;background:linear-gradient(155deg,#1c1928,#12101b);border:1px solid var(--line);border-radius:18px;transition:transform .18s,border-color .18s}
+.dashboard-card:hover{transform:translateY(-3px);border-color:var(--cyan)}
+.dashboard-icon{width:44px;height:44px;display:grid;place-items:center;border-radius:13px;background:#4de8d41c;font-size:21px}
+.dashboard-tag{font:10px var(--font-mono);letter-spacing:1.4px;color:var(--cyan)}
+.dashboard-card strong{font-size:18px}
+.dashboard-copy{font-size:13px;line-height:1.65;color:var(--text-dim)}
+.dashboard-link{margin-top:auto;color:var(--cyan);font-size:12px;font-weight:700}
+.dashboard-status{display:flex;align-items:center;gap:12px;margin-top:18px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#161320}
+.status-dot{width:9px;height:9px;flex:0 0 9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px rgba(77,232,212,.65)}
+.dashboard-status b{font-size:13px}
+.dashboard-status small{display:block;color:var(--text-dim);font-size:11px;line-height:1.6;margin-top:4px}
+@media(max-width:900px){.dashboard-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.dashboard-grid{grid-template-columns:1fr}.dashboard-card{min-height:185px}.dashboard-tool{padding:20px 15px}}
+
+@media(max-width:780px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:100;transform:translateX(-100%);transition:transform 0.25s;}
+  .sidebar.open{transform:translateX(0);}
+  .menu-btn{display:flex;}
+}
+
+/* ===== MASTERING STUDIO ===== */
+.studio-tool{flex:1;overflow-y:auto;padding:24px;}
+.studio-wrap{max-width:880px;margin:0 auto;}
+
+.dropzone{
+  border:2px dashed var(--line);border-radius:16px;padding:44px 24px;text-align:center;
+  margin-bottom:24px;transition:border-color 0.2s,background 0.2s;
+}
+.dropzone.drag{border-color:var(--cyan);background:rgba(77,232,212,0.04);}
+.dropzone .ic{font-size:30px;margin-bottom:10px;display:block;}
+.dropzone p{color:var(--text-dim);font-size:13px;margin-top:4px;}
+.dropzone input[type=file]{display:none;}
+
+.track-info{
+  display:none;background:var(--bg-card);border:1px solid var(--line);border-radius:14px;
+  padding:18px 20px;margin-bottom:20px;
+}
+.track-info.show{display:block;}
+.track-info .name{font-weight:700;font-size:14px;margin-bottom:4px;}
+.track-info .meta{font-size:12px;color:var(--text-dim);font-family:var(--font-mono);}
+
+#waveformCanvas{width:100%;height:90px;display:block;border-radius:10px;background:var(--bg);margin-top:14px;}
+
+.transport{display:flex;align-items:center;gap:12px;margin-top:14px;direction:ltr;}
+.play-btn{
+  width:42px;height:42px;border-radius:50%;background:var(--cyan);color:#06231F;
+  display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;
+}
+.transport-time{font-family:var(--font-mono);font-size:12px;color:var(--text-dim);min-width:90px;}
+.seek-bar{flex:1;height:4px;background:var(--line);border-radius:99px;position:relative;cursor:pointer;}
+.seek-fill{height:100%;background:var(--cyan);border-radius:99px;width:0%;}
+
+.fx-section{background:var(--bg-card);border:1px solid var(--line);border-radius:14px;padding:22px 20px;margin-bottom:18px;}
+.fx-section h3{font-size:13.5px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.fx-section h3 .toggle{
+  margin-left:auto;width:38px;height:20px;border-radius:99px;background:var(--line);position:relative;transition:background 0.2s;
+}
+.fx-section h3 .toggle.on{background:var(--cyan);}
+.fx-section h3 .toggle::after{
+  content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform 0.2s;
+}
+.fx-section h3 .toggle.on::after{transform:translateX(18px);}
+
+.eq-bands{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:6px;direction:ltr;}
+.eq-band{display:flex;flex-direction:column;align-items:center;gap:10px;}
+.eq-band .slider-vert-wrap{
+  height:100px;width:24px;display:flex;align-items:center;justify-content:center;
+}
+.eq-band input[type=range]{
+  -webkit-appearance:none;appearance:none;
+  width:100px;height:4px;
+  background:var(--line);border-radius:99px;outline:none;
+  transform:rotate(-90deg);
+  margin:0;
+}
+.eq-band input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+  background:var(--cyan);cursor:pointer;box-shadow:0 0 0 3px rgba(77,232,212,0.15);
+}
+.eq-band input[type=range]::-moz-range-thumb{
+  width:16px;height:16px;border-radius:50%;background:var(--cyan);border:none;cursor:pointer;
+}
+.eq-band .freq-label{font-size:10px;color:var(--text-dim);font-family:var(--font-mono);}
+.eq-band .db-val{font-size:11px;font-family:var(--font-mono);color:var(--cyan);font-weight:700;}
+
+.knob-row{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;direction:ltr;}
+.knob-group{display:flex;flex-direction:column;gap:6px;}
+.knob-group label{font-size:11px;color:var(--text-dim);display:flex;justify-content:space-between;font-family:var(--font-mono);direction:ltr;}
+.knob-group label span{color:var(--cyan);}
+.knob-group input[type=range]{
+  -webkit-appearance:none;height:4px;background:var(--line);border-radius:99px;outline:none;
+}
+.knob-group input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--cyan);cursor:pointer;
+}
+.voice-fx-note{color:var(--text-dim);font-size:12px;line-height:1.6;margin:-4px 0 16px}
+.voice-fx-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;direction:ltr}
+@media(max-width:600px){.voice-fx-grid{grid-template-columns:1fr}}
+.practice-panel{margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+.practice-panel h4{font-size:12px;margin-bottom:12px}
+.practice-markers{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+.practice-markers .marker-time{font:11px var(--font-mono);color:var(--text-dim);margin-inline-end:8px}
+.practice-btn{padding:8px 11px;border:1px solid var(--line);border-radius:9px;color:var(--text-dim);font-size:11px}
+.practice-btn.active{border-color:var(--cyan);color:var(--cyan);background:#4de8d414}
+.vocal-presets{direction:rtl;margin:0 0 18px}
+.vocal-presets .preset-chip{border-radius:9px}
+
+.meter-row{display:flex;gap:16px;align-items:flex-end;margin:18px 0;direction:ltr;}
+.vu-meter{flex:1;height:60px;background:var(--bg);border:1px solid var(--line);border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:flex-end;}
+.vu-fill{width:100%;background:linear-gradient(180deg,var(--danger),var(--amber) 30%,var(--cyan) 60%);height:0%;transition:height 0.08s;}
+.vu-label{position:absolute;top:4px;left:6px;font-size:10px;color:var(--text-dim);font-family:var(--font-mono);z-index:2;}
+.lufs-readout{text-align:center;}
+.lufs-readout .val{font-family:var(--font-mono);font-size:26px;font-weight:700;color:var(--cyan);}
+.lufs-readout .lbl{font-size:10px;color:var(--text-dim);letter-spacing:1px;margin-top:2px;}
+
+.export-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;}
+.preset-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;direction:ltr;}
+.preset-chip{padding:7px 14px;border-radius:99px;font-size:12px;border:1px solid var(--line);color:var(--text-dim);}
+.preset-chip.active{background:var(--magenta);color:#1A0614;border-color:var(--magenta);font-weight:700;}
+.preset-chip:hover:not(.active){border-color:var(--magenta);color:var(--text);}
+
+.muted-note{font-size:11.5px;color:var(--text-dim);background:var(--bg-card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;line-height:1.6;margin-top:14px;}
+
+/* IMAGE TOOL */
+.img-tool{flex:1;overflow-y:auto;padding:24px;}
+.img-wrap{max-width:880px;margin:0 auto;}
+.img-input-row{display:flex;gap:10px;margin-bottom:24px;}
+.img-input-row input{flex:1;background:var(--bg-card);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:14px;outline:none;}
+.img-input-row input:focus{border-color:var(--cyan);}
+.img-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+@media(max-width:700px){.img-grid{grid-template-columns:1fr;}}
+.img-result{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg-card);aspect-ratio:1;display:flex;align-items:center;justify-content:center;}
+.img-result img{width:100%;height:100%;object-fit:cover;}
+.img-placeholder{color:var(--text-dim);font-size:13px;text-align:center;padding:20px;}
+
+/* CHAT TOOL */
+.chat-scroll{flex:1;overflow-y:auto;padding:24px;}
+.chat-wrap{max-width:740px;margin:0 auto;}
+.msg{display:flex;gap:12px;margin-bottom:20px;}
+.msg .av{width:30px;height:30px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;}
+.msg.user .av{background:var(--line);}
+.msg.ai .av{background:linear-gradient(135deg,var(--cyan),var(--magenta));color:#0A0910;}
+.msg .bubble{background:var(--bg-card);border:1px solid var(--line);border-radius:12px;padding:13px 16px;font-size:14px;line-height:1.65;max-width:80%;}
+.msg.user .bubble{background:transparent;border-color:transparent;color:var(--text-dim);}
+.composer{border-top:1px solid var(--line);padding:16px 24px;}
+.composer-inner{max-width:740px;margin:0 auto;display:flex;gap:10px;align-items:flex-end;background:var(--bg-card);border:1px solid var(--line);border-radius:14px;padding:8px 8px 8px 16px;}
+.composer textarea{flex:1;background:none;border:none;outline:none;resize:none;font-size:14px;color:var(--text);max-height:110px;padding:9px 0;font-family:inherit;}
+.send-btn{width:36px;height:36px;border-radius:10px;flex-shrink:0;background:var(--cyan);color:#06231F;display:flex;align-items:center;justify-content:center;font-weight:900;}
+.chat-attach-btn{width:36px;height:36px;flex-shrink:0;border:1px solid var(--line);border-radius:10px;color:var(--cyan);font-size:18px}
+.chat-attachment{max-width:740px;margin:0 auto 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg-card);font-size:12px;color:var(--text-dim)}
+.chat-attachment-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.chat-attachment-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chat-attachment-remove{color:var(--danger);font-size:16px;padding:2px 6px}
+.chat-audio-preview{width:100%;height:38px;margin-top:8px}
+.assistant-audio-action{display:block;margin-top:10px;padding:9px 12px;border:1px solid rgba(77,232,212,.35);border-radius:9px;color:var(--cyan);font-size:12px}
+.assistant-transcript{margin-top:9px;padding-top:8px;border-top:1px solid var(--line);color:var(--text-dim);font-size:12px}
+
+.spin{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);border-top-color:var(--cyan);animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<!-- LANDING -->
+<div id="landing">
+  <nav class="topnav">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M4 14V10M9 18V6M14 16V8M19 12V12.5" stroke="#0A0910" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+      STUDIO X
+    </div>
+    <div class="nav-links">
+      <a href="#fonctionnalites">الأدوات</a>
+      <a href="#about">شكون حنا</a>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="enterApp()">دخل للستوديو</button>
+  </nav>
+
+  <section class="hero">
+    <div class="eyebrow">🎚️ ميكساج و ماستيرينغ ديال بصاح فالنافيغاتور</div>
+    <h1>الصوت ديالك، <span class="grad">واجد للخروج.</span><br>من A ل Z، بلا برنامج.</h1>
+    <p class="lead">EQ، كومبريسيون، ليميتينغ و ماستيرينغ ديال اللودنس — موتور ديال صوت بصاح، زيادة فالخلق ديال الصور بالذكاء الاصطناعي، كل شي فالنافيغاتور ديالك.</p>
+    <div class="hero-cta">
+      <button class="btn btn-primary" onclick="enterApp()">دخل للستوديو →</button>
+    </div>
+  </section>
+
+  <section class="section" id="fonctionnalites">
+    <div class="section-head">
+      <div class="tag">اشنو كيدير STUDIO X بصاح</div>
+      <h2>أدوات ديال بصاح، ماشي حيل</h2>
+      <p>كل تراطمو ديال الصوت هنا حساب ديال السيغنال بصاح، ماشي simulation.</p>
+    </div>
+    <div class="grid-3">
+      <div class="feat-card">
+        <div class="feat-icon">🎚️</div>
+        <h3>ميكساج و EQ</h3>
+        <p>إيكوالايزر ب5 بندات، كومبريسور كامل بالأتاك/ريليس/راسيو، كلشي محسوب فلحظتو على الفيشي ديالك.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📊</div>
+        <h3>ماستيرينغ و اللودنس</h3>
+        <p>ليميتر ب ceiling قابل للتبديل، تقدير loudness بطريقة RMS، وبريسات mastering جاهزة.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎨</div>
+        <h3>خلق الصور بالذكاء الاصطناعي</h3>
+        <p>صنع كوفرات، صور ديال البوشيت ولا محتوى فيزيال من وصف بسيط.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" id="about">
+    <div>STUDIO X — مصنوع من الرباط، المغرب 🇲🇦</div>
+  </footer>
+</div>
+
+<!-- APP -->
+<div id="appView">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <div class="brand-mark" style="width:26px;height:26px"><svg viewBox="0 0 24 24" fill="none"><path d="M4 14V10M9 18V6M14 16V8M19 12V12.5" stroke="#0A0910" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <div style="font-family:var(--font-display);font-weight:700;font-size:14px;">STUDIO X</div>
+      </div>
+      <button class="tool-tab active" data-tool="dashboard" onclick="switchTool('dashboard')">⌂ Dashboard</button>
+      <button class="tool-tab" data-tool="studio" onclick="switchTool('studio')">🎚️ ميكساج و ماستيرينغ</button>
+      <button class="tool-tab" data-tool="image" onclick="switchTool('image')">🎨 خلق الصور</button>
+      <button class="tool-tab" data-tool="chat" onclick="switchTool('chat')">💬 المساعد الخلاق</button>
+      <button class="tool-tab" data-tool="whatsapp" onclick="switchTool('whatsapp')">📲 WhatsApp</button>
+      <div class="sidebar-footer">
+        الصوت كيتعالج محلياً — AI بحصة مجانية محدودة<br><br>
+        <button class="btn btn-ghost btn-sm btn-block" onclick="exitApp()">← رجوع للموقع</button>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <div class="main-head">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+          <div>
+            <h2 id="toolTitle">ميكساج و ماستيرينغ</h2>
+            <div class="sub" id="toolSub">حمّل فيشي صوتي باش تبدا.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD OVERVIEW -->
+      <section class="dashboard-tool" id="dashboardTool">
+        <div class="dashboard-wrap">
+          <div class="dashboard-welcome">
+            <div class="eyebrow">STUDIO X · WORKSPACE</div>
+            <h1>مرحبا بك فالستوديو</h1>
+            <p>اختار الأداة وبدا خدمتك. ملفات الصوت كيبقاو فالجهاز ديالك.</p>
+          </div>
+          <div class="dashboard-grid">
+            <button class="dashboard-card audio-card" onclick="switchTool('studio')">
+              <span class="dashboard-icon">🎚️</span><span class="dashboard-tag">AUDIO ENGINE</span>
+              <strong>ميكساج و ماستيرينغ</strong><span class="dashboard-copy">حمّل الصوت، استعمل Vocal FX وpresets، درّب بLoop وسرعة مختلفة، وصدر WAV.</span>
+              <span class="dashboard-link">دخل للأداة ←</span>
+            </button>
+            <button class="dashboard-card image-card" onclick="switchTool('image')">
+              <span class="dashboard-icon">🎨</span><span class="dashboard-tag">IMAGE AI</span>
+              <strong>خلق الصور</strong><span class="dashboard-copy">صاوب كوفر أو صورة من الوصف ديالك باستعمال Workers AI.</span>
+              <span class="dashboard-link">دخل للأداة ←</span>
+            </button>
+            <button class="dashboard-card chat-card" onclick="switchTool('chat')">
+              <span class="dashboard-icon">✦</span><span class="dashboard-tag">CREATIVE AI</span>
+              <strong>المساعد الخلاق</strong><span class="dashboard-copy">سول على الصوت، الكتابة، التوزيع، ولا الأفكار الإبداعية.</span>
+              <span class="dashboard-link">بدا محادثة ←</span>
+            </button>
+            <button class="dashboard-card whatsapp-card" onclick="switchTool('whatsapp')">
+              <span class="dashboard-icon">📲</span><span class="dashboard-tag">WHATSAPP ASSISTANT</span>
+              <strong>مساعد WhatsApp</strong><span class="dashboard-copy">استقبل audio وملفات نصية، وجاوب بالـAI ورجع التفريغ كملف.</span>
+              <span class="dashboard-link">حالة الربط ←</span>
+            </button>
+          </div>
+          <div class="dashboard-status"><span class="status-dot"></span><div><b>جاهز للاستعمال</b><small>المعالجة الصوتية محلية؛ خدمات AI كتحتاج اتصال بالإنترنت وحصتها المجانية محدودة.</small></div></div>
+        </div>
+      </section>
+
+      <!-- STUDIO TOOL -->
+      <div class="studio-tool" id="studioTool">
+        <div class="studio-wrap">
+
+          <div class="dropzone" id="dropZone">
+            <span class="ic">🎵</span>
+            <strong>قلب الفيشي الصوتي ديالك هنا</strong>
+            <p>MP3, WAV ولا M4A — التراطمو 100% local فالنافيغاتور ديالك</p>
+            <input type="file" id="audioInput" accept="audio/*">
+          </div>
+
+          <div class="track-info" id="trackInfo">
+            <div class="name" id="trackName">—</div>
+            <div class="meta" id="trackMeta">—</div>
+            <canvas id="waveformCanvas"></canvas>
+            <div class="transport">
+              <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+              <span class="transport-time" id="timeDisplay">0:00 / 0:00</span>
+              <div class="seek-bar" id="seekBar"><div class="seek-fill" id="seekFill"></div></div>
+            </div>
+            <div class="practice-panel">
+              <h4>🎧 تدريب وLoop للمقطع</h4>
+              <div class="knob-row">
+                <div class="knob-group">
+                  <label>سرعة التشغيل <span id="speedVal">1.00×</span></label>
+                  <input type="range" id="speedSlider" min="0.5" max="1.5" step="0.05" value="1">
+                </div>
+                <div class="knob-group">
+                  <label>نقطة A <span id="loopStartVal">0:00</span></label>
+                  <button class="practice-btn" type="button" onclick="setPracticeMarker('start')">حط A من الموضع الحالي</button>
+                </div>
+                <div class="knob-group">
+                  <label>نقطة B <span id="loopEndVal">—</span></label>
+                  <button class="practice-btn" type="button" onclick="setPracticeMarker('end')">حط B من الموضع الحالي</button>
+                </div>
+              </div>
+              <div class="practice-markers">
+                <button class="practice-btn" id="loopToggle" type="button" onclick="togglePracticeLoop()">🔁 Loop مطفي</button>
+                <span class="marker-time" id="loopRangeLabel">حدّد A و B باش تعاود جزء من التراك.</span>
+              </div>
+              <div class="voice-fx-note" style="margin:10px 0 0">السرعة كتبدل النغمة حتى هي؛ هاد الأداة للتدريب، ماشي time-stretch مستقل.</div>
+            </div>
+          </div>
+
+          <div class="fx-section" id="eqSection">
+            <h3>🎛️ إيكوالايزر ب5 بندات <div class="toggle on" id="eqToggle" onclick="toggleFx('eq')"></div></h3>
+            <div class="eq-bands" id="eqBands"></div>
+          </div>
+
+          <div class="fx-section" id="compSection">
+            <h3>🗜️ كومبريسور <div class="toggle on" id="compToggle" onclick="toggleFx('comp')"></div></h3>
+            <div class="knob-row">
+              <div class="knob-group">
+                <label>Threshold <span id="threshVal">-24 dB</span></label>
+                <input type="range" id="threshSlider" min="-60" max="0" value="-24">
+              </div>
+              <div class="knob-group">
+                <label>Ratio <span id="ratioVal">4:1</span></label>
+                <input type="range" id="ratioSlider" min="1" max="20" value="4">
+              </div>
+              <div class="knob-group">
+                <label>Attack <span id="attackVal">3 ms</span></label>
+                <input type="range" id="attackSlider" min="0" max="100" value="3">
+              </div>
+              <div class="knob-group">
+                <label>Release <span id="releaseVal">250 ms</span></label>
+                <input type="range" id="releaseSlider" min="50" max="1000" value="250">
+              </div>
+              <div class="knob-group">
+                <label>Knee <span id="kneeVal">6 dB</span></label>
+                <input type="range" id="kneeSlider" min="0" max="40" value="6">
+              </div>
+              <div class="knob-group">
+                <label>Makeup Gain <span id="makeupVal">0 dB</span></label>
+                <input type="range" id="makeupSlider" min="0" max="24" value="0">
+              </div>
+            </div>
+          </div>
+
+          <div class="fx-section" id="voiceFxSection">
+            <h3>🎙️ Vocal FX <span style="font-size:11px;color:var(--text-dim);font-weight:400">ستايل ديال التسجيل الصوتي</span></h3>
+            <p class="voice-fx-note">اختار إعداد بداية من presets أصلية، ومن بعد عدّل Reverb وEcho وPitch shift على ذوقك. هادو ماشي Auto-Tune حقيقي ولا vocoder.</p>
+            <div class="preset-row vocal-presets" id="vocalPresets">
+              <button class="preset-chip" type="button" data-vocal-preset="clean">Clean Booth</button>
+              <button class="preset-chip" type="button" data-vocal-preset="warm">Warm Room</button>
+              <button class="preset-chip" type="button" data-vocal-preset="wide">Wide Echo</button>
+              <button class="preset-chip" type="button" data-vocal-preset="radio">Radio Color</button>
+              <button class="preset-chip" type="button" data-vocal-preset="bright">Bright Lead</button>
+            </div>
+            <div class="voice-fx-grid">
+              <div class="knob-group">
+                <label>Reverb mix <span id="reverbMixVal">8%</span></label>
+                <input type="range" id="reverbMixSlider" min="0" max="60" value="8">
+              </div>
+              <div class="knob-group">
+                <label>Echo mix <span id="delayMixVal">0%</span></label>
+                <input type="range" id="delayMixSlider" min="0" max="45" value="0">
+              </div>
+              <div class="knob-group">
+                <label>Echo time <span id="delayTimeVal">280 ms</span></label>
+                <input type="range" id="delayTimeSlider" min="80" max="600" value="280">
+              </div>
+              <div class="knob-group">
+                <label>Pitch shift <span id="pitchShiftVal">0.0 st</span></label>
+                <input type="range" id="pitchShiftSlider" min="-6" max="6" step="0.1" value="0">
+              </div>
+            </div>
+          </div>
+
+          <div class="fx-section" id="masterSection">
+            <h3>📊 ماستيرينغ و اللودنس</h3>
+            <div class="preset-row" id="masterPresets">
+              <button class="preset-chip active" data-target="-14">Streaming (-14 LUFS)</button>
+              <button class="preset-chip" data-target="-9">Club / DJ (-9 LUFS)</button>
+              <button class="preset-chip" data-target="-16">Radio (-16 LUFS)</button>
+              <button class="preset-chip" data-target="-23">Broadcast (-23 LUFS)</button>
+            </div>
+            <div class="knob-row" style="margin-bottom:18px;">
+              <div class="knob-group">
+                <label>Limiter Ceiling <span id="ceilingVal">-1.0 dB</span></label>
+                <input type="range" id="ceilingSlider" min="-6" max="0" value="-1" step="0.1">
+              </div>
+              <div class="knob-group">
+                <label>Output Gain <span id="outGainVal">0 dB</span></label>
+                <input type="range" id="outGainSlider" min="-12" max="12" value="0">
+              </div>
+            </div>
+            <div class="meter-row">
+              <div class="vu-meter"><span class="vu-label">L</span><div class="vu-fill" id="vuLeft"></div></div>
+              <div class="vu-meter"><span class="vu-label">R</span><div class="vu-fill" id="vuRight"></div></div>
+              <div class="lufs-readout">
+                <div class="val" id="lufsReadout">—</div>
+                <div class="lbl">LUFS ESTIMÉ · RMS</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="export-row">
+            <button class="btn btn-primary" id="exportBtn" onclick="exportMaster()" disabled>⬇ صدر الماستر (WAV)</button>
+            <button class="btn btn-ghost" id="shareWhatsAppBtn" onclick="shareMasterWhatsApp()" disabled>📲 صيفطو فـWhatsApp</button>
+            <button class="btn btn-ghost" onclick="resetStudio()">رجّع من جديد</button>
+          </div>
+
+          <div class="muted-note">
+            جميع التراطمو (EQ، كومبريسيون، ليميتينغ) محسوبين فلحظتو ب Web Audio API — مباشرة فالنافيغاتور ديالك، بلا ما نصيفطو الفيشي ديالك لسيرفور. التصدير كيطبق الشين الكامل و كيخلق فيشي WAV بصاح متراطم.
+          </div>
+        </div>
+      </div>
+
+      <!-- IMAGE TOOL -->
+      <div class="img-tool hidden" id="imageTool">
+        <div class="img-wrap">
+          <div class="muted-note">التوليد كيدوز عبر Cloudflare Workers AI. الحصة المجانية اليومية محدودة وكتتجدد كل نهار.</div>
+          <div class="img-input-row">
+            <input type="text" id="imgPrompt" placeholder="وصف الكوفر ولا الصورة لي بغيتي تخلق...">
+            <button class="btn btn-primary" id="imgGenBtn" onclick="generateImages()">خلق</button>
+          </div>
+          <div class="img-grid" id="imgGrid">
+            <div class="img-result"><div class="img-placeholder">الصور لي غادي تخلق<br>غادي يبانو هنا</div></div>
+            <div class="img-result"><div class="img-placeholder">—</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHAT TOOL -->
+      <div class="chat-scroll hidden" id="chatTool">
+        <div class="chat-wrap" id="chatWrap">
+          <div class="msg ai">
+            <div class="av">AI</div>
+            <div class="bubble">Salam ! Ana l'assistant créatif ديال STUDIO X. عندك سؤال على الميكساج، الماستيرينغ، ولا بغيتي نصيحة فالكتابة ولا الأرانجمو؟ قول ليا.</div>
+          </div>
+        </div>
+      </div>
+      <div class="composer hidden" id="chatComposer">
+        <div style="max-width:740px;margin:0 auto 8px;color:var(--text-dim);font-size:10px;line-height:1.5">الصوت كيمشي لـCloudflare AI غير للتفريغ؛ التحسين كيدوز محلياً فالمكساج، ما كنخزنو الملفش هنا. الحصة محدودة.</div>
+        <div class="chat-attachment hidden" id="chatAttachmentPanel">
+          <div class="chat-attachment-top"><span class="chat-attachment-name" id="chatAttachmentName"></span><button class="chat-attachment-remove" type="button" onclick="clearChatAttachment()" aria-label="حيد الملف">×</button></div>
+          <audio class="chat-audio-preview hidden" id="chatAudioPreview" controls></audio>
+        </div>
+        <div class="composer-inner">
+          <input id="chatFileInput" type="file" accept="audio/*,.txt,.md,.csv,.json" hidden>
+          <button class="chat-attach-btn" type="button" onclick="document.getElementById('chatFileInput').click()" title="زيد audio أو ملف نصي">＋</button>
+          <textarea id="chatInput" rows="1" placeholder="كتب رسالتك... (Darija, Français)"></textarea>
+          <button class="send-btn" onclick="sendChat()">→</button>
+        </div>
+      </div>
+
+      <section class="studio-tool hidden" id="whatsappTool">
+        <div class="studio-wrap">
+          <div class="fx-section">
+            <h3>📲 مساعد WhatsApp</h3>
+            <p class="muted-note" style="margin:0 0 16px">البوت كيرد على الرسائل، كيستقبل الصوت وملفات TXT/MD/CSV/JSON حتى 5MB، وكيرجع التفريغ أو الملخص مع نصيحة المساعد فملف TXT. تقدر حتى تصيفط WAV الماستر من زر WhatsApp فالمكساج. ربط Meta مازال خاصو بيانات حساب WhatsApp Business ديالك.</p>
+            <div class="dashboard-status" id="whatsappConnectionStatus"><span class="status-dot"></span><div><b>كنتحقق من الربط...</b><small id="whatsappStatusDetail">—</small></div></div>
+            <div class="knob-group" style="margin-top:18px;direction:ltr">
+              <label>Webhook URL</label>
+              <div class="img-input-row" style="margin:0">
+                <input id="whatsappWebhookUrl" type="text" readonly value="/api/whatsapp/webhook">
+                <button class="btn btn-primary" onclick="copyWhatsAppWebhook()">نسخ</button>
+              </div>
+            </div>
+            <div class="muted-note">خاص يتحطّو فـCloudflare Secrets: WHATSAPP_ACCESS_TOKEN، WHATSAPP_PHONE_NUMBER_ID، WHATSAPP_VERIFY_TOKEN، وMETA_APP_SECRET. ما تحط حتى secret فواجهة الموقع ولا فالمحادثة. Meta كتأكد Webhook بالتوقيع.</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+/* ===================================================================
+   STUDIO X — Moteur audio réel (Web Audio API) + outils créatifs IA
+=================================================================== */
+
+function enterApp(){
+  document.getElementById('landing').classList.add('hidden');
+  document.getElementById('appView').classList.add('active');
+  switchTool('dashboard');
+}
+function exitApp(){
+  document.getElementById('appView').classList.remove('active');
+  document.getElementById('landing').classList.remove('hidden');
+}
+
+function switchTool(tool){
+  if(tool !== 'studio' && isPlaying) togglePlay();
+  document.querySelectorAll('.tool-tab').forEach(t => t.classList.toggle('active', t.dataset.tool === tool));
+  ['dashboardTool','studioTool','imageTool','whatsappTool'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  document.getElementById('chatTool').classList.add('hidden');
+  document.getElementById('chatComposer').classList.add('hidden');
+
+  const titles = {
+    dashboard:['Dashboard','الأدوات ديالك كاملة من هنا.'],
+    studio:['ميكساج و ماستيرينغ','حمّل فيشي صوتي باش تبدا.'],
+    image:['خلق الصور','وصف الشي لي بغيتي تخلق.'],
+    chat:['المساعد الخلاق','أفكار، ليريكس، نصائح ديال الأرانجمو — ب Darija ولا Français.'],
+    whatsapp:['مساعد WhatsApp','إعداد Webhook ديال Meta واستقبال الملفات.']
+  };
+  document.getElementById('toolTitle').textContent = titles[tool][0];
+  document.getElementById('toolSub').textContent = titles[tool][1];
+
+  if(tool === 'dashboard'){
+    document.getElementById('dashboardTool').classList.remove('hidden');
+  } else if(tool === 'chat'){
+    document.getElementById('chatTool').classList.remove('hidden');
+    document.getElementById('chatComposer').classList.remove('hidden');
+  } else if(tool === 'whatsapp'){
+    document.getElementById('whatsappTool').classList.remove('hidden');
+    refreshWhatsAppStatus();
+  } else {
+    document.getElementById(tool+'Tool').classList.remove('hidden');
+  }
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+/* ============== AUDIO ENGINE ============== */
+let audioCtx, audioBuffer, sourceNode, liveNodes, lastMasterBlob = null;
+let isPlaying = false, startedAt = 0, pausedAt = 0;
+let playbackRateAtStart = 1;
+let loopEnabled = false, loopStart = 0, loopEnd = 0;
+let animFrame;
+
+const EQ_FREQS = [60, 250, 1000, 4000, 12000];
+let eqEnabled = true, compEnabled = true;
+let eqGains = [0,0,0,0,0];
+let masterTargetLUFS = -14;
+
+const dropZone = document.getElementById('dropZone');
+const audioInput = document.getElementById('audioInput');
+dropZone.addEventListener('click', (e) => {
+  if(e.target !== audioInput) audioInput.click();
+});
+audioInput.addEventListener('click', (e) => e.stopPropagation());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag');
+  if(e.dataTransfer.files.length) loadAudioFile(e.dataTransfer.files[0]);
+});
+audioInput.addEventListener('change', e => { if(e.target.files.length) loadAudioFile(e.target.files[0]); });
+
+async function loadAudioFile(file){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') await audioCtx.resume();
+
+    if(isPlaying) togglePlay();
+    document.getElementById('trackName').textContent = 'كيتحلل الصوت...';
+
+    const arrayBuffer = await file.arrayBuffer();
+    audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+    document.getElementById('trackInfo').classList.add('show');
+    document.getElementById('trackName').textContent = file.name;
+    const mins = Math.floor(audioBuffer.duration / 60);
+    const secs = Math.floor(audioBuffer.duration % 60).toString().padStart(2,'0');
+    document.getElementById('trackMeta').textContent =
+      `${audioBuffer.sampleRate} Hz · ${audioBuffer.numberOfChannels === 2 ? 'Stéréo' : 'Mono'} · ${mins}:${secs}`;
+
+    drawWaveform(audioBuffer);
+    document.getElementById('exportBtn').disabled = false;
+    analyzeLUFS(audioBuffer);
+    pausedAt = 0;
+    loopStart = 0;
+    loopEnd = audioBuffer.duration;
+    loopEnabled = false;
+    updatePracticeUI();
+    document.getElementById('playBtn').textContent = '▶';
+    updateTimeDisplay();
+    return true;
+  }catch(err){
+    alert('ما قدرتش نقرا هاد الفيشي الصوتي: ' + err.message + '\n\nحاول ب فيشي MP3 ولا WAV عادي.');
+    console.error('Audio load error:', err);
+    return false;
+  }
+}
+
+function drawWaveform(buffer){
+  const canvas = document.getElementById('waveformCanvas');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.clientWidth * dpr;
+  canvas.height = 90 * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  const data = buffer.getChannelData(0);
+  const w = canvas.clientWidth, h = 90;
+  const step = Math.ceil(data.length / w);
+  const sampleStride = Math.max(1, Math.ceil(step / 2048));
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = '#4DE8D4';
+  for(let i=0;i<w;i++){
+    let min=1, max=-1;
+    for(let j=0;j<step;j+=sampleStride){
+      const idx = i*step+j;
+      if(idx < data.length){
+        const v = data[idx];
+        if(v < min) min = v;
+        if(v > max) max = v;
+      }
+    }
+    const y1 = (1+min)*h/2, y2 = (1+max)*h/2;
+    ctx.fillRect(i, y1, 1, Math.max(1, y2-y1));
+  }
+}
+
+/* ---- Build the playback/export chain ---- */
+const reverbImpulses = new WeakMap();
+function makeReverbImpulse(ctx){
+  if(reverbImpulses.has(ctx)) return reverbImpulses.get(ctx);
+  const seconds = 1.6, length = Math.floor(ctx.sampleRate * seconds);
+  const impulse = ctx.createBuffer(2, length, ctx.sampleRate);
+  for(let channel=0;channel<2;channel++){
+    const samples = impulse.getChannelData(channel);
+    for(let i=0;i<length;i++) samples[i] = (Math.random()*2-1)*Math.pow(1-i/length,2.7);
+  }
+  reverbImpulses.set(ctx, impulse);
+  return impulse;
+}
+
+function connectAudioChain(ctx, source, destination, analyserEnabled=false){
+  let lastNode = source;
+  const eqFilters = EQ_FREQS.map((freq, i) => {
+    const filter = ctx.createBiquadFilter();
+    filter.type = i === 0 ? 'lowshelf' : (i === EQ_FREQS.length-1 ? 'highshelf' : 'peaking');
+    filter.frequency.value = freq; filter.Q.value = 1;
+    lastNode.connect(filter); lastNode = filter;
+    return filter;
+  });
+
+  const compressor = ctx.createDynamicsCompressor();
+  lastNode.connect(compressor);
+  const makeup = ctx.createGain(); compressor.connect(makeup);
+  const outputGain = ctx.createGain(); makeup.connect(outputGain);
+
+  const effectsMix = ctx.createGain();
+  const dry = ctx.createGain(); outputGain.connect(dry); dry.connect(effectsMix);
+  const convolver = ctx.createConvolver(); convolver.buffer = makeReverbImpulse(ctx);
+  const reverbWet = ctx.createGain(); outputGain.connect(convolver); convolver.connect(reverbWet); reverbWet.connect(effectsMix);
+  const delay = ctx.createDelay(1.2); outputGain.connect(delay);
+  const feedback = ctx.createGain(); delay.connect(feedback); feedback.connect(delay);
+  const delayWet = ctx.createGain(); delay.connect(delayWet); delayWet.connect(effectsMix);
+
+  const limiter = ctx.createDynamicsCompressor();
+  effectsMix.connect(limiter);
+  let analyser = null;
+  if(analyserEnabled){
+    analyser = ctx.createAnalyser(); analyser.fftSize = 512;
+    limiter.connect(analyser); analyser.connect(destination);
+  } else limiter.connect(destination);
+
+  return {eqFilters, compressor, makeup, outputGain, convolver, reverbWet, delay, feedback, delayWet, dry, limiter, analyser};
+}
+
+function buildChain(){
+  sourceNode = audioCtx.createBufferSource();
+  sourceNode.buffer = audioBuffer;
+  sourceNode.playbackRate.value = controlValue('speedSlider');
+  sourceNode.detune.value = Number(document.getElementById('pitchShiftSlider').value) * 100;
+  sourceNode.loop = loopEnabled;
+  sourceNode.loopStart = loopStart;
+  sourceNode.loopEnd = loopEnd;
+  liveNodes = connectAudioChain(audioCtx, sourceNode, audioCtx.destination, true);
+  applyLiveSettings();
+  return {sourceNode, analyser:liveNodes.analyser};
+}
+
+function setAudioParam(param, value){
+  if(!param) return;
+  if(audioCtx && audioCtx.state === 'running') param.setTargetAtTime(value, audioCtx.currentTime, 0.015);
+  else param.value = value;
+}
+
+function controlValue(id){ return Number(document.getElementById(id).value); }
+function getPlaybackRate(){ return controlValue('speedSlider') * Math.pow(2,controlValue('pitchShiftSlider')/12); }
+function getTrackPosition(){
+  if(!audioBuffer) return 0;
+  let position=isPlaying ? pausedAt+(audioCtx.currentTime-startedAt)*playbackRateAtStart : pausedAt;
+  if(loopEnabled && isPlaying && position>=loopEnd && loopEnd>loopStart){
+    position=loopStart+((position-loopStart)%(loopEnd-loopStart));
+  }
+  return Math.max(0,Math.min(audioBuffer.duration,position));
+}
+function formatTrackTime(seconds){ return `${Math.floor(seconds/60)}:${Math.floor(seconds%60).toString().padStart(2,'0')}`; }
+function updatePracticeUI(){
+  const speed=document.getElementById('speedSlider');
+  if(speed) document.getElementById('speedVal').textContent=Number(speed.value).toFixed(2)+'×';
+  document.getElementById('loopStartVal').textContent=formatTrackTime(loopStart);
+  document.getElementById('loopEndVal').textContent=audioBuffer?formatTrackTime(loopEnd):'—';
+  const toggle=document.getElementById('loopToggle');
+  if(toggle){
+    toggle.classList.toggle('active',loopEnabled);
+    toggle.textContent=loopEnabled?'🔁 Loop شاعل':'🔁 Loop مطفي';
+  }
+  document.getElementById('loopRangeLabel').textContent=audioBuffer
+    ? `المقطع: ${formatTrackTime(loopStart)} — ${formatTrackTime(loopEnd)}`
+    : 'حمّل تراك باش تحدد مقطع للتكرار.';
+}
+
+function applyLiveSettings(){
+  if(!liveNodes) return;
+  liveNodes.eqFilters.forEach((filter,i)=>setAudioParam(filter.gain,eqEnabled?eqGains[i]:0));
+  setAudioParam(liveNodes.compressor.threshold,compEnabled?controlValue('threshSlider'):0);
+  setAudioParam(liveNodes.compressor.ratio,compEnabled?controlValue('ratioSlider'):1);
+  setAudioParam(liveNodes.compressor.attack,controlValue('attackSlider')/1000);
+  setAudioParam(liveNodes.compressor.release,controlValue('releaseSlider')/1000);
+  setAudioParam(liveNodes.compressor.knee,controlValue('kneeSlider'));
+  setAudioParam(liveNodes.makeup.gain,dbToLinear(controlValue('makeupSlider')));
+  setAudioParam(liveNodes.outputGain.gain,dbToLinear(controlValue('outGainSlider')));
+  setAudioParam(liveNodes.limiter.threshold,controlValue('ceilingSlider'));
+  const reverbMix=controlValue('reverbMixSlider')/100, delayMix=controlValue('delayMixSlider')/100;
+  setAudioParam(liveNodes.dry.gain,Math.max(0,1-reverbMix-delayMix));
+  setAudioParam(liveNodes.reverbWet.gain,reverbMix);
+  setAudioParam(liveNodes.delayWet.gain,delayMix);
+  setAudioParam(liveNodes.delay.delayTime,controlValue('delayTimeSlider')/1000);
+  setAudioParam(liveNodes.feedback.gain,Math.min(0.32,delayMix*0.55));
+  setAudioParam(sourceNode.playbackRate,controlValue('speedSlider'));
+  setAudioParam(sourceNode.detune,controlValue('pitchShiftSlider')*100);
+}
+
+function dbToLinear(db){ return Math.pow(10, db/20); }
+
+async function togglePlay(){
+  if(!audioBuffer) return;
+  if(isPlaying){
+    pausedAt = getTrackPosition();
+    try{sourceNode.stop();}catch{}
+    isPlaying = false;
+    liveNodes = null;
+    document.getElementById('playBtn').textContent = '▶';
+    cancelAnimationFrame(animFrame);
+  } else {
+    if(audioCtx.state === 'suspended') await audioCtx.resume();
+    if(pausedAt>=audioBuffer.duration) pausedAt=0;
+    if(loopEnabled && (pausedAt<loopStart || pausedAt>=loopEnd)) pausedAt=loopStart;
+    const {sourceNode: sn, analyser} = buildChain();
+    sn.start(0, Math.min(pausedAt,audioBuffer.duration));
+    startedAt = audioCtx.currentTime;
+    playbackRateAtStart = getPlaybackRate();
+    isPlaying = true;
+    document.getElementById('playBtn').textContent = '❙❙';
+    sn.onended = () => {
+      if(sourceNode===sn && isPlaying){ isPlaying = false; pausedAt = 0; liveNodes=null; document.getElementById('playBtn').textContent = '▶'; updateTimeDisplay(); }
+    };
+    runMeterLoop(analyser);
+  }
+}
+
+function runMeterLoop(analyser){
+  const data = new Uint8Array(analyser.frequencyBinCount);
+  function loop(){
+    if(!isPlaying) return;
+    analyser.getByteTimeDomainData(data);
+    let sum = 0;
+    for(let i=0;i<data.length;i++){
+      const v = (data[i]-128)/128;
+      sum += v*v;
+    }
+    const rms = Math.sqrt(sum/data.length);
+    const pct = Math.min(100, rms*220);
+    document.getElementById('vuLeft').style.height = pct + '%';
+    document.getElementById('vuRight').style.height = (pct*0.9) + '%';
+    updateTimeDisplay();
+    animFrame = requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+function updateTimeDisplay(){
+  const dur = audioBuffer ? audioBuffer.duration : 0;
+  const elapsed = getTrackPosition();
+  const fmt = formatTrackTime;
+  document.getElementById('timeDisplay').textContent = `${fmt(elapsed)} / ${fmt(dur)}`;
+  document.getElementById('seekFill').style.width = dur ? (elapsed/dur*100)+'%' : '0%';
+}
+document.getElementById('seekBar').addEventListener('click', e => {
+  if(!audioBuffer) return;
+  const rect=e.currentTarget.getBoundingClientRect();
+  const ratio=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
+  const resume=isPlaying;
+  if(resume){try{sourceNode.stop();}catch{} isPlaying=false;liveNodes=null;cancelAnimationFrame(animFrame);}
+  pausedAt=ratio*audioBuffer.duration;
+  if(loopEnabled && (pausedAt<loopStart || pausedAt>=loopEnd)) pausedAt=loopStart;
+  updateTimeDisplay();
+  if(resume) togglePlay();
+});
+
+function setPracticeMarker(which){
+  if(!audioBuffer) return;
+  const position=getTrackPosition();
+  const gap=Math.min(0.1,audioBuffer.duration/100);
+  if(which==='start') loopStart=Math.max(0,Math.min(position,loopEnd-gap));
+  else loopEnd=Math.max(loopStart+gap,Math.min(audioBuffer.duration,position));
+  if(sourceNode){sourceNode.loopStart=loopStart;sourceNode.loopEnd=loopEnd;}
+  updatePracticeUI();
+}
+
+function togglePracticeLoop(){
+  if(!audioBuffer) return;
+  if(loopEnd-loopStart<0.1){alert('حدد مقطع أطول شوية بين A و B.');return;}
+  const position=getTrackPosition();
+  loopEnabled=!loopEnabled;
+  if(sourceNode) sourceNode.loop=loopEnabled;
+  if(loopEnabled && isPlaying){
+    if(position<loopStart || position>=loopEnd){
+      try{sourceNode.stop();}catch{}
+      isPlaying=false;liveNodes=null;cancelAnimationFrame(animFrame);
+      pausedAt=loopStart;
+      togglePlay();
+    }
+  } else if(loopEnabled && (pausedAt<loopStart || pausedAt>=loopEnd)) pausedAt=loopStart;
+  updatePracticeUI();
+  updateTimeDisplay();
+}
+
+/* ---- EQ band sliders ---- */
+function buildEqUI(){
+  const wrap = document.getElementById('eqBands');
+  wrap.innerHTML = EQ_FREQS.map((freq, i) => `
+    <div class="eq-band">
+      <div class="db-val" id="eqVal${i}">0 dB</div>
+      <div class="slider-vert-wrap">
+        <input type="range" min="-12" max="12" value="0" id="eqSlider${i}" oninput="updateEq(${i}, this.value)">
+      </div>
+      <div class="freq-label">${freq >= 1000 ? (freq/1000)+'k' : freq}Hz</div>
+    </div>
+  `).join('');
+}
+function updateEq(i, val){
+  eqGains[i] = parseFloat(val);
+  document.getElementById('eqVal'+i).textContent = (val > 0 ? '+' : '') + val + ' dB';
+  applyLiveSettings();
+}
+buildEqUI();
+
+function toggleFx(type){
+  if(type === 'eq'){
+    eqEnabled = !eqEnabled;
+    document.getElementById('eqToggle').classList.toggle('on', eqEnabled);
+  } else {
+    compEnabled = !compEnabled;
+    document.getElementById('compToggle').classList.toggle('on', compEnabled);
+  }
+  applyLiveSettings();
+}
+
+/* ---- Compressor slider labels ---- */
+const compSliderMap = [
+  ['threshSlider','threshVal', v => v+' dB'],
+  ['ratioSlider','ratioVal', v => v+':1'],
+  ['attackSlider','attackVal', v => v+' ms'],
+  ['releaseSlider','releaseVal', v => v+' ms'],
+  ['kneeSlider','kneeVal', v => v+' dB'],
+  ['makeupSlider','makeupVal', v => v+' dB'],
+];
+compSliderMap.forEach(([sliderId, labelId, fmt]) => {
+  document.getElementById(sliderId).addEventListener('input', e => {
+    document.getElementById(labelId).textContent = fmt(e.target.value);
+    applyLiveSettings();
+  });
+});
+document.getElementById('ceilingSlider').addEventListener('input', e => {
+  document.getElementById('ceilingVal').textContent = parseFloat(e.target.value).toFixed(1) + ' dB';
+  applyLiveSettings();
+});
+document.getElementById('outGainSlider').addEventListener('input', e => {
+  document.getElementById('outGainVal').textContent = e.target.value + ' dB';
+  applyLiveSettings();
+});
+[
+  ['reverbMixSlider','reverbMixVal',v=>v+'%'],
+  ['delayMixSlider','delayMixVal',v=>v+'%'],
+  ['delayTimeSlider','delayTimeVal',v=>v+' ms'],
+  ['pitchShiftSlider','pitchShiftVal',v=>Number(v).toFixed(1)+' st']
+].forEach(([sliderId,labelId,format])=>{
+  document.getElementById(sliderId).addEventListener('input',e=>{
+    document.getElementById(labelId).textContent=format(e.target.value);
+    if(sliderId==='pitchShiftSlider' && isPlaying){
+      pausedAt=getTrackPosition();
+      startedAt=audioCtx.currentTime;
+      playbackRateAtStart=getPlaybackRate();
+    }
+    applyLiveSettings();
+    updateTimeDisplay();
+  });
+});
+document.getElementById('speedSlider').addEventListener('input',e=>{
+  if(isPlaying){
+    pausedAt=getTrackPosition();
+    startedAt=audioCtx.currentTime;
+    playbackRateAtStart=getPlaybackRate();
+  }
+  document.getElementById('speedVal').textContent=Number(e.target.value).toFixed(2)+'×';
+  applyLiveSettings();
+  updateTimeDisplay();
+});
+
+const vocalPresets = {
+  clean:{eq:[-2,-1,0,1,1.5],threshold:-25,ratio:3,attack:8,release:150,knee:7,makeup:2,reverb:5,echo:0,time:280},
+  warm:{eq:[1,0.5,-1,0.5,-1],threshold:-28,ratio:2.5,attack:15,release:190,knee:10,makeup:2,reverb:18,echo:0,time:300},
+  wide:{eq:[-1,-0.5,0,1.5,1],threshold:-25,ratio:3.5,attack:5,release:130,knee:6,makeup:2,reverb:22,echo:16,time:340},
+  radio:{eq:[-5,-3,2,3,-4],threshold:-30,ratio:6,attack:3,release:110,knee:4,makeup:3,reverb:2,echo:0,time:180},
+  bright:{eq:[-1,-1,0.5,2,2],threshold:-24,ratio:3,attack:7,release:140,knee:6,makeup:2,reverb:8,echo:0,time:280}
+};
+function applyVocalPreset(name){
+  const preset=vocalPresets[name];
+  if(!preset)return;
+  eqEnabled=true;compEnabled=true;
+  document.getElementById('eqToggle').classList.add('on');
+  document.getElementById('compToggle').classList.add('on');
+  preset.eq.forEach((value,index)=>{
+    const slider=document.getElementById('eqSlider'+index);
+    slider.value=value;updateEq(index,value);
+  });
+  const setSlider=(id,label,value,format)=>{
+    document.getElementById(id).value=value;
+    document.getElementById(label).textContent=format(value);
+  };
+  setSlider('threshSlider','threshVal',preset.threshold,v=>`${v} dB`);
+  setSlider('ratioSlider','ratioVal',preset.ratio,v=>`${v}:1`);
+  setSlider('attackSlider','attackVal',preset.attack,v=>`${v} ms`);
+  setSlider('releaseSlider','releaseVal',preset.release,v=>`${v} ms`);
+  setSlider('kneeSlider','kneeVal',preset.knee,v=>`${v} dB`);
+  setSlider('makeupSlider','makeupVal',preset.makeup,v=>`${v} dB`);
+  setSlider('reverbMixSlider','reverbMixVal',preset.reverb,v=>`${v}%`);
+  setSlider('delayMixSlider','delayMixVal',preset.echo,v=>`${v}%`);
+  setSlider('delayTimeSlider','delayTimeVal',preset.time,v=>`${v} ms`);
+  document.querySelectorAll('[data-vocal-preset]').forEach(button=>button.classList.toggle('active',button.dataset.vocalPreset===name));
+  applyLiveSettings();
+}
+document.querySelectorAll('[data-vocal-preset]').forEach(button=>button.addEventListener('click',()=>applyVocalPreset(button.dataset.vocalPreset)));
+
+document.querySelectorAll('#masterPresets .preset-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('#masterPresets .preset-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    masterTargetLUFS = parseFloat(chip.dataset.target);
+    if(audioBuffer) analyzeLUFS(audioBuffer);
+  });
+});
+
+/* ---- RMS-based loudness estimate, not a BS.1770 integrated measurement ---- */
+function analyzeLUFS(buffer){
+  const data = buffer.getChannelData(0);
+  let sumSq = 0;
+  const stride=Math.max(1,Math.ceil(data.length/1_000_000));
+  let count=0;
+  for(let i=0;i<data.length;i+=stride){sumSq+=data[i]*data[i];count++;}
+  const rms = Math.sqrt(sumSq/count);
+  const estimatedLUFS = rms>1e-8 ? 20 * Math.log10(rms) - 0.691 : -120; // sampled RMS estimate, not BS.1770
+  document.getElementById('lufsReadout').textContent = rms>1e-8 ? estimatedLUFS.toFixed(1) : '—';
+  const suggestedGain = rms>1e-8 ? (masterTargetLUFS - estimatedLUFS).toFixed(1) : 0;
+  document.getElementById('outGainSlider').value = Math.max(-12, Math.min(12, suggestedGain));
+  document.getElementById('outGainVal').textContent = document.getElementById('outGainSlider').value + ' dB';
+  applyLiveSettings();
+}
+
+function resetStudio(){
+  if(isPlaying) togglePlay();
+  liveNodes = null;
+  audioBuffer = null;
+  loopEnabled=false;loopStart=0;loopEnd=0;pausedAt=0;
+  document.getElementById('speedSlider').value=1;
+  updatePracticeUI();
+  document.getElementById('trackInfo').classList.remove('show');
+  document.getElementById('exportBtn').disabled = true;
+  document.getElementById('lufsReadout').textContent = '—';
+  document.getElementById('timeDisplay').textContent = '0:00 / 0:00';
+  document.getElementById('seekFill').style.width = '0%';
+  audioInput.value = '';
+}
+
+/* ---- Offline render & export to WAV ---- */
+async function exportMaster(){
+  if(!audioBuffer) return;
+  const btn = document.getElementById('exportBtn');
+  btn.disabled = true; btn.textContent = 'كيطبق التأثيرات...';
+
+  try{
+    if(isPlaying) togglePlay();
+    const OfflineContext=window.OfflineAudioContext||window.webkitOfflineAudioContext;
+    if(!OfflineContext) throw new Error('التصدير غير مدعوم فهاد المتصفح. جرّب Chrome أو Safari محدّث.');
+    const pitchRate=Math.pow(2,controlValue('pitchShiftSlider')/12);
+    const tailSeconds=1.7;
+    const renderLength=Math.ceil(audioBuffer.length/pitchRate+audioBuffer.sampleRate*tailSeconds);
+    const wavBytes=renderLength*audioBuffer.numberOfChannels*2+44;
+    if(wavBytes>0xFFFFFFFF) throw new Error('الملف كبير بزاف لصيغة WAV. نقص مدة التراك أو صدره على أجزاء.');
+    if(wavBytes>180*1024*1024 && !confirm(`الماستر غادي يكون تقريباً ${Math.round(wavBytes/1024/1024)} MB، وقد يستهلك ذاكرة كبيرة فالتلفون. نكملو؟`)) return;
+
+    const offlineCtx = new OfflineContext(audioBuffer.numberOfChannels, renderLength, audioBuffer.sampleRate);
+    const src = offlineCtx.createBufferSource();
+    src.buffer = audioBuffer;
+    src.detune.value=controlValue('pitchShiftSlider')*100;
+    const nodes=connectAudioChain(offlineCtx,src,offlineCtx.destination);
+    nodes.eqFilters.forEach((filter,i)=>filter.gain.value=eqEnabled?eqGains[i]:0);
+    nodes.compressor.threshold.value=compEnabled?controlValue('threshSlider'):0;
+    nodes.compressor.ratio.value=compEnabled?controlValue('ratioSlider'):1;
+    nodes.compressor.attack.value=controlValue('attackSlider')/1000;
+    nodes.compressor.release.value=controlValue('releaseSlider')/1000;
+    nodes.compressor.knee.value=controlValue('kneeSlider');
+    nodes.makeup.gain.value=dbToLinear(controlValue('makeupSlider'));
+    nodes.outputGain.gain.value=dbToLinear(controlValue('outGainSlider'));
+    nodes.limiter.threshold.value=controlValue('ceilingSlider');
+    const reverbMix=controlValue('reverbMixSlider')/100, delayMix=controlValue('delayMixSlider')/100;
+    nodes.dry.gain.value=Math.max(0,1-reverbMix-delayMix);
+    nodes.reverbWet.gain.value=reverbMix;
+    nodes.delayWet.gain.value=delayMix;
+    nodes.delay.delayTime.value=controlValue('delayTimeSlider')/1000;
+    nodes.feedback.gain.value=Math.min(0.32,delayMix*0.55);
+    src.start(0);
+    btn.textContent = 'كيصدر WAV...';
+    const rendered = await offlineCtx.startRendering();
+    const wavBlob = await bufferToWav(rendered,pct=>btn.textContent=`كيجهز WAV ${pct}%...`);
+    lastMasterBlob=wavBlob;
+    document.getElementById('shareWhatsAppBtn').disabled=false;
+    const url = URL.createObjectURL(wavBlob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'studio-x-master.wav';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),30000);
+  }catch(err){
+    alert('خطأ فالتصدير: ' + err.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '⬇ صدر الماستر (WAV)';
+  }
+}
+
+async function bufferToWav(buffer,onProgress=()=>{}){
+  const numChannels = buffer.numberOfChannels;
+  const sampleRate = buffer.sampleRate;
+  const length = buffer.length * numChannels * 2 + 44;
+  const arrBuf = new ArrayBuffer(length);
+  const view = new DataView(arrBuf);
+
+  function writeString(offset, str){ for(let i=0;i<str.length;i++) view.setUint8(offset+i, str.charCodeAt(i)); }
+
+  writeString(0,'RIFF'); view.setUint32(4, length-8, true); writeString(8,'WAVE');
+  writeString(12,'fmt '); view.setUint32(16,16,true); view.setUint16(20,1,true);
+  view.setUint16(22,numChannels,true); view.setUint32(24,sampleRate,true);
+  view.setUint32(28,sampleRate*numChannels*2,true); view.setUint16(32,numChannels*2,true); view.setUint16(34,16,true);
+  writeString(36,'data'); view.setUint32(40, buffer.length*numChannels*2, true);
+
+  const channels=Array.from({length:numChannels},(_,ch)=>buffer.getChannelData(ch));
+  let offset = 44;
+  const chunkFrames=65536;
+  for(let start=0;start<buffer.length;start+=chunkFrames){
+    const end=Math.min(buffer.length,start+chunkFrames);
+    for(let i=start;i<end;i++){
+      for(let ch=0;ch<numChannels;ch++){
+        let sample = channels[ch][i];
+        sample = Math.max(-1, Math.min(1, sample));
+        view.setInt16(offset, sample < 0 ? sample*0x8000 : sample*0x7FFF, true);
+        offset += 2;
+      }
+    }
+    onProgress(Math.round(end/buffer.length*100));
+    await new Promise(resolve=>setTimeout(resolve,0));
+  }
+  return new Blob([arrBuf], {type:'audio/wav'});
+}
+
+async function shareMasterWhatsApp(){
+  if(!lastMasterBlob)return;
+  const file=new File([lastMasterBlob],'studio-x-master.wav',{type:'audio/wav'});
+  if(!navigator.share||!navigator.canShare||!navigator.canShare({files:[file]})){
+    alert('المتصفح ما كيدعمش إرسال الملفات مباشرة. الماستر تحمّل؛ تقدر تختارو من WhatsApp.');return;
+  }
+  try{await navigator.share({files:[file],title:'STUDIO X Master',text:'الماستر ديالي من STUDIO X'});}
+  catch(error){if(error.name!=='AbortError')alert('ما قدرناش نفتحو قائمة المشاركة: '+error.message);}
+}
+
+async function refreshWhatsAppStatus(){
+  const heading=document.querySelector('#whatsappConnectionStatus b');
+  const detail=document.getElementById('whatsappStatusDetail');
+  document.getElementById('whatsappWebhookUrl').value=location.origin+'/api/whatsapp/webhook';
+  try{
+    const response=await fetch('/api/whatsapp/status');
+    const data=await response.json();
+    if(data.configured){heading.textContent='WhatsApp مربوط';detail.textContent='Webhook واجد. زيدو فـMeta Developers واشترك فـmessages.';}
+    else{heading.textContent='باقي ما مربوطش';detail.textContent='الـWebhook واجد، ولكن خاص بيانات WhatsApp Business API فـCloudflare Secrets.';}
+  }catch{heading.textContent='تعذر فحص الربط';detail.textContent='تحقق من اتصال الإنترنت وعاود.';}
+}
+
+async function copyWhatsAppWebhook(){
+  const input=document.getElementById('whatsappWebhookUrl');
+  try{await navigator.clipboard.writeText(input.value);alert('تنسخ رابط الـWebhook.');}
+  catch{input.select();document.execCommand('copy');alert('تنسخ رابط الـWebhook.');}
+}
+
+/* ============== IMAGE GENERATION THROUGH CLOUDFLARE WORKERS AI ============== */
+async function generateImages(){
+  const prompt = document.getElementById('imgPrompt').value.trim();
+  if(!prompt) return;
+  const grid = document.getElementById('imgGrid');
+  const btn = document.getElementById('imgGenBtn');
+  btn.disabled = true; btn.textContent = 'كيخلق...';
+  grid.innerHTML = '<div class="img-result"><div class="spin" style="margin:auto"></div></div>';
+  try{
+    const res = await fetch('/api/image', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'ما قدرناش نخلقو الصورة.');
+    const card=document.createElement('div');card.className='img-result';
+    const image=document.createElement('img');image.src=data.dataURI;image.alt=prompt;image.loading='lazy';card.appendChild(image);
+    const second=document.createElement('div');second.className='img-result';
+    const caption=document.createElement('div');caption.className='img-placeholder';caption.textContent='الصورة تولدات بالذكاء الاصطناعي';second.appendChild(caption);
+    grid.replaceChildren(card,second);
+  }catch(err){
+    grid.replaceChildren();const error=document.createElement('div');error.className='img-placeholder';error.textContent='تعذر توليد الصورة: '+err.message;grid.appendChild(error);
+  }finally{btn.disabled=false;btn.textContent='خلق';}
+}
+
+/* ============== CREATIVE CHAT THROUGH CLOUDFLARE WORKERS AI ============== */
+const chatInput = document.getElementById('chatInput');
+const chatFileInput = document.getElementById('chatFileInput');
+let chatAttachmentFile = null, chatAttachmentUrl = null;
+function isChatAudio(file){ return Boolean(file&&(file.type.startsWith('audio/')||/\.(mp3|wav|m4a|aac|ogg|opus|webm)$/i.test(file.name))); }
+chatInput.addEventListener('keydown', e => { if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendChat(); } });
+chatFileInput.addEventListener('change',()=>{
+  const file=chatFileInput.files?.[0];
+  if(!file) return;
+  const isAudio=isChatAudio(file);
+  const isText=/\.(txt|md|csv|json)$/i.test(file.name)||file.type.startsWith('text/');
+  const maxSize=isAudio?5*1024*1024:2*1024*1024;
+  if((!isAudio&&!isText)||file.size>maxSize){
+    alert(isAudio?'اختار audio أقل من 5MB.':'الملفات المقبولة: audio حتى 5MB أو TXT/MD/CSV/JSON حتى 2MB.');
+    chatFileInput.value='';return;
+  }
+  clearChatAttachment();
+  chatAttachmentFile=file;
+  document.getElementById('chatAttachmentName').textContent=`${file.name} · ${(file.size/1024/1024).toFixed(2)} MB`;
+  document.getElementById('chatAttachmentPanel').classList.remove('hidden');
+  const player=document.getElementById('chatAudioPreview');
+  if(isAudio){
+    chatAttachmentUrl=URL.createObjectURL(file);player.src=chatAttachmentUrl;player.classList.remove('hidden');
+  }else player.classList.add('hidden');
+  chatFileInput.value='';
+});
+
+function clearChatAttachment(){
+  if(chatAttachmentUrl){URL.revokeObjectURL(chatAttachmentUrl);chatAttachmentUrl=null;}
+  chatAttachmentFile=null;
+  document.getElementById('chatAttachmentPanel').classList.add('hidden');
+  const player=document.getElementById('chatAudioPreview');player.pause();player.removeAttribute('src');player.load();player.classList.add('hidden');
+}
+
+function addMsg(role, html){
+  const wrap = document.getElementById('chatWrap');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = `<div class="av">${role==='user'?'TU':'AI'}</div><div class="bubble">${html}</div>`;
+  wrap.appendChild(div);
+  document.getElementById('chatTool').scrollTop = document.getElementById('chatTool').scrollHeight;
+  return div;
+}
+function escapeHtml(str){ const d=document.createElement('div'); d.textContent=str; return d.innerHTML; }
+
+async function sendChat(){
+  const file=chatAttachmentFile;
+  const text = chatInput.value.trim() || (isChatAudio(file)?'حلل هاد الصوت وعطيني خطوات باش نحسن جودتو.':'');
+  if(!text&&!file) return;
+  let messageText=text;
+  const isAudio=isChatAudio(file);
+  if(file&&!isAudio){
+    try{
+      const contents=(await file.text()).slice(0,3000);
+      messageText=`${text||'شرح ليا هاد الملف.'}\n\nمحتوى ${file.name}${file.size>3000?' (أول 3000 حرف)':''}:\n${contents}`;
+    }catch(err){alert('ما قدرناش نقراو الملف النصي.');return;}
+  }
+  addMsg('user', escapeHtml(isAudio?`${messageText}\n🎧 ملف صوتي: ${file.name}`:messageText).replace(/\n/g,'<br>'));
+  chatInput.value = '';
+  if(file) clearChatAttachment();
+  const loading = addMsg('ai', '<div class="spin"></div>');
+  try{
+    const messages=[...document.querySelectorAll('#chatWrap .msg')].slice(-8).map(m=>({role:m.classList.contains('user')?'user':'assistant',content:(m.querySelector('.bubble')?.textContent||'').slice(0,2000)})).filter(m=>m.content);
+    let res;
+    if(isAudio){
+      const form=new FormData();form.append('file',file,file.name);form.append('messages',JSON.stringify(messages));
+      res=await fetch('/api/audio-assist',{method:'POST',body:form});
+    }else{
+      res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages})});
+    }
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'تعذر الاتصال بالمساعد.');
+    loading.querySelector('.bubble').innerHTML = escapeHtml(data.text || '').replace(/\n/g,'<br>');
+    if(isAudio){
+      if(data.transcript){
+        const transcript=document.createElement('div');transcript.className='assistant-transcript';
+        transcript.textContent='التفريغ الصوتي: '+data.transcript;loading.querySelector('.bubble').appendChild(transcript);
+      }
+      const openBtn=document.createElement('button');openBtn.className='assistant-audio-action';openBtn.type='button';
+      openBtn.textContent='فتح الصوت فالمكساج وتطبيق إعداد Vocal أولي';
+      openBtn.addEventListener('click',()=>openAudioInStudio(file));
+      loading.querySelector('.bubble').appendChild(openBtn);
+    }
+  }catch(err){
+    loading.querySelector('.bubble').textContent = 'Erreur: ' + err.message;
+  }
+}
+
+async function openAudioInStudio(file){
+  switchTool('studio');
+  const loaded=await loadAudioFile(file);
+  if(!loaded)return;
+  const set=(id,value,labelId,format)=>{
+    const input=document.getElementById(id);input.value=value;
+    if(labelId)document.getElementById(labelId).textContent=format(value);
+  };
+  eqEnabled=true;document.getElementById('eqToggle').classList.add('on');
+  compEnabled=true;document.getElementById('compToggle').classList.add('on');
+  [-2,-1,0,1.5,1].forEach((value,index)=>updateEq(index,value));
+  set('threshSlider',-24,'threshVal',v=>`${v} dB`);
+  set('ratioSlider',3,'ratioVal',v=>`${v}:1`);
+  set('attackSlider',8,'attackVal',v=>`${v} ms`);
+  set('releaseSlider',140,'releaseVal',v=>`${v} ms`);
+  set('kneeSlider',8,'kneeVal',v=>`${v} dB`);
+  set('makeupSlider',2,'makeupVal',v=>`${v} dB`);
+  set('reverbMixSlider',12,'reverbMixVal',v=>`${v}%`);
+  set('delayMixSlider',0,'delayMixVal',v=>`${v}%`);
+  set('delayTimeSlider',280,'delayTimeVal',v=>`${v} ms`);
+  set('pitchShiftSlider',0,'pitchShiftVal',v=>`${Number(v).toFixed(1)} st`);
+  analyzeLUFS(audioBuffer);
+  applyLiveSettings();
+}
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  });
+}
+enterApp();
+</script>
+</body>
+</html>
